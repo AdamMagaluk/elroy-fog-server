@@ -29,17 +29,17 @@ elroy.prototype._init = function(){
     .allow('*')
     .compress()
     .logger()
-    .format({ engines: [siren], override: {'application/json': siren}})
+    .format({ directory : path.join(__dirname,'api_formats'), engines: [siren], override: {'application/json': siren}})
     .add(DevicesResource, this.deviceDrivers)
     .listen(this.opts.port || 3000);
     
   // setup server
 
   // load all scouts
-  //this._initScouts(function(err){});
+  this._initScouts(function(err){});
 
 //  this._initApps(function(err){});
-
+  
 };
 
 // expose a state machine as an api to the cloud.
@@ -50,11 +50,9 @@ elroy.prototype.device = function(deviceKey){
   return this.deviceDrivers[deviceKey];
 };
 
-// load a scout into the fogserver
+// load a device driver into the fogserver
 elroy.prototype.load = function(driver){
-
-  var test = {on : function(){}};
-
+  var test = {on : function(){return this;}};
   driver.init(test /*config...*/ );
 
   // load device driver into devices

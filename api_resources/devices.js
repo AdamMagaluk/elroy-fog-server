@@ -3,16 +3,8 @@ var DevicesModel = require('../api_models/devices');
 
 var Devices = module.exports = function(devices) {
   
-  var i = 1;
-  this.devices = Object.keys(devices).map(function(device){
-    var d = {
-      name: device.name,
-      id: i
-    };
+  this.devices = devices;
 
-    i++;
-    return d;
-  });
   this.path = '/_devices';
 };
 
@@ -33,11 +25,23 @@ Devices.prototype.list = function(env, next) {
   var urlHelper = env.helpers.url;
   var self = this;
 
-  var items = this.devices.map(function(device) {
+  var i = 0;
+  var devices = Object.keys(this.devices).map(function(device){
+    var d = {
+      name: device,
+      id: i
+    };
+
+    i++;
+    return d;
+  });
+
+
+  var items = devices.map(function(device) {
     var entity = DeviceModel.create({
       id: device.id,
       name: device.name,
-      selfUrl: urlHelper.join(device.id),
+      selfUrl: urlHelper.join(device.id+''),
       collectionUrl: urlHelper.path(self.path)
     });
 
