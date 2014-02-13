@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/AdamMagaluk/elroy-fog-server/issues"
   },
-  "homepage": "https://github.com/AdamMagaluk/elroy-fog-server"
+  "homepage": "https://github.com/AdamMagaluk/elroy-fog-server",
+  "dependencies": {
+    "async": "~0.2.10",
+    "titan": "~0.1.1"
+  }
 }
