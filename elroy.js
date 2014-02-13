@@ -30,7 +30,9 @@ elroy.prototype._init = function(callback){
 elroy.prototype.expose = function(endPoint,stateMachine){};
 
 // return a device driver for the key
-elroy.prototype.device = function(deviceKey){};
+elroy.prototype.device = function(deviceKey){
+  return this.deviceDrivers[deviceKey];
+};
 
 // load a scout into the fogserver
 elroy.prototype.load = function(driver){
@@ -38,6 +40,7 @@ elroy.prototype.load = function(driver){
   this.deviceDrivers[driver.name] = driver;
 };
 
+// loads all scouts in /scouts dir
 elroy.prototype._initScouts = function(callback){
   var self = this;
   var dir = path.join(process.cwd(), 'scouts');
