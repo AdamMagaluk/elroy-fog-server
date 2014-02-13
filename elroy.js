@@ -11,7 +11,7 @@ function elroy(opts){
   
   this.scouts = [];
 
-  this.apps = {};
+  this.apps = [];
 
   this._init();
 }
@@ -23,7 +23,11 @@ elroy.prototype._init = function(callback){
   // load all scouts
   this._initScouts(function(err){
 
-  })
+  });
+
+  this._initApps(function(err){
+
+  });
 };
 
 // expose a state machine as an api to the cloud.
@@ -36,6 +40,11 @@ elroy.prototype.device = function(deviceKey){
 
 // load a scout into the fogserver
 elroy.prototype.load = function(driver){
+
+  var test = {on : function(){}};
+
+  driver.init(test /*config...*/ );
+
   // load device driver into devices
   this.deviceDrivers[driver.name] = driver;
 };
@@ -60,4 +69,15 @@ elroy.prototype.scout = function(scoutType,callback){
   var scout = new scoutType(this);
   this.scouts.push(scout);
   scout.init(callback);
+};
+
+// loads all scouts in /scouts dir
+elroy.prototype._initApps = function(callback){
+  var self = this;
+
+  var file = path.join(process.cwd(),'app.js');
+  var app = require(file)(this);
+  this.apps = [app];
+
+  callback();
 };
