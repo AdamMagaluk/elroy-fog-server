@@ -3,6 +3,10 @@ var fs = require('fs')
   , async = require('async')
   , titan = require('titan');
 
+var titan = require('titan');
+var siren = require('argo-formatter-siren');
+var DevicesResource = require('./api_resources/devices');
+
 module.exports = elroy;
 
 function elroy(opts){
@@ -12,22 +16,30 @@ function elroy(opts){
   this.scouts = [];
 
   this.apps = [];
+  
+  this.opts = opts || {};
 
   this._init();
-}
+};
 
-elroy.prototype._init = function(callback){
+elroy.prototype._init = function(){
+  this.server = titan();
 
+  this.server
+    .allow('*')
+    .compress()
+    .logger()
+    .format({ engines: [siren], override: {'application/json': siren}})
+    .add(DevicesResource, this.deviceDrivers)
+    .listen(this.opts.port || 3000);
+    
   // setup server
 
   // load all scouts
-  this._initScouts(function(err){
+  //this._initScouts(function(err){});
 
-  });
+//  this._initApps(function(err){});
 
-  this._initApps(function(err){
-
-  });
 };
 
 // expose a state machine as an api to the cloud.
